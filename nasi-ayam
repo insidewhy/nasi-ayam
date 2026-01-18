@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+exec docker 2>/dev/null compose run --rm --quiet app "$@"

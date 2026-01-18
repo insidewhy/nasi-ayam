@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pandoc:*)",
+      "Bash(python3:*)",
+      "Bash(python scripts/generate_sample_data.py:*)",
+      "Bash(echo:*)",
+      "Bash(docker compose exec:*)",
+      "WebFetch(domain:agentset.ai)",
+      "WebSearch"
+    ]
+  }
+}

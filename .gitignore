@@ -1,0 +1,6 @@
+/specifications/*.pdf
+__pycache__
+.venv/
+/.pytest_cache/
+/logs/*
+!/logs/.keep-dir
