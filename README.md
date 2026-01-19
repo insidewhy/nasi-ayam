@@ -10,7 +10,7 @@ The project runs within docker images ensuring that local database setup is not 
 
 ![Demo](./docs/example.webp)
 
-Note the initial load time is quite significant, LangChain dependencies are very large and take a while to import via python. Also note the first request takes a very long time to process, LangChain lazy loads various parts of its code so the first time they are used leads to high CPU usage and a lot of delay. This and python's GIL explain why the loading spinners update so infrequently during these processes.
+Note the initial load time is quite significant, LangChain dependencies are very large and take a while to import via python. Also note the first request takes a very long time to process, LangChain lazy loads various parts of its code the first time those paths are triggered which leads to high CPU usage and some delay. This and python's GIL explain why the loading spinners update so infrequently during these processes.
 
 ## Prerequisites
 
@@ -123,6 +123,7 @@ make reset-postgres
 
 - [Detailed Specification](./specifications/nasi-ayam.md)
 - [Suggested prompts against the bundled sample data](./example-data/suggested-prompts.md)
+- [Overview presentation](./docs/overview.md)
 
 ## License
 

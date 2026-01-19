@@ -33,8 +33,9 @@ The chatbot should answer questions by retrieving and synthesizing information f
 - Use `poetry` to manage python dependencies, `pyenv` is installed so `.python-version` can be used to manage the python version
 - Use `docker compose` to run the application, the `postgres` image should contain a health check and the `application` image should have a dependency on the `postgres` image which will cause the `application` to wait for it to be healthy before starting.
   - The `postgres` image should store data via a docker volume so that it will not lose data across restarts.
-  - `nvidia-container-toolkit` is available so docker containers should be able to access the GPU, ensure the docker compose enables GPU access
-  - The `docker compose` configuration should mount the root directory of the project as a volume rather than statically building the python project, this will allow it to use the most recent source code on each invocation and also to access the documents stored locally in the project. It can assume that the user has already installed dependencies with poetry etc. before running the script.
+  - The `application` image should store hugging face models in a volume so they can be reused across restarts.
+  - `nvidia-container-toolkit` is available so docker containers should be able to access the GPU, ensure the docker compose configuration enables GPU access
+  - The `docker compose` configuration should mount the root directory of the project as a volume rather than statically building the python project, this will allow it to use the most recent source code on each invocation and also to access the documents stored locally in the project.
 - All local models should be able to run on a `Intel(R) Core(TM) Ultra 9 185H` and/or a `NVIDIA RTX 2000 Ada Generation Laptop GPU`
   - Note that the system has 32Gb of memory and the Nvidia GPU has 8Gb of memory.
 - Use `Alembic` for database migrations (raw SQL migrations, no ORM required)
@@ -135,6 +136,8 @@ A bash script should be provided at `./nasi-ayam` which will run the application
 
 If the application is invoked with a parameter it should send this query after ingestion is complete, then the application should exit when it has finished adding the prompt to the user's prompt history, compacting (if necessary) and displaying the answer.
 
+Add `-i` and `-c` argument support to the application, the former can be used to only trigger ingestion and exit, the latter can be used to clear the message history context.
+
 ## Implementation notes
 
 - A `Makefile` should be available in the project root the following targets:
@@ -143,7 +146,8 @@ If the application is invoked with a parameter it should send this query after i
   - `typecheck`: Run `mypy` against the source code
   - `format`: Run `black` against the source code
   - `lint`: Run `flake8` against the source code
-  - `validate`: Should have `format`, `lint` and `typecheck` as dependencies
+  - `test`: Run unit tests
+  - `validate`: Should have `format`, `lint`, `test` and `typecheck` as dependencies
 - A github action workflow should exist to validate formatting, type checks and linting
 
 ## Database Schema
