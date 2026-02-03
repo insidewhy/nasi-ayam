@@ -9,14 +9,18 @@ from uuid import UUID
 from langchain_postgres import PGVector
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from nasi_ayam.database import get_document_by_id, get_semantic_chunks_by_ids
-from nasi_ayam.progress import ProgressCallback
+from nasi_ayam.database import (
+    get_document_by_id,
+    get_cursor,
+    get_semantic_chunks_by_ids,
+)
 from nasi_ayam.ingestion.embedder import (
     COLLECTION_NAME,
     EMBEDDING_MODEL,
     SentenceTransformerEmbeddings,
 )
 from nasi_ayam.logging import get_logger
+from nasi_ayam.progress import ProgressCallback
 
 logger = get_logger("search")
 
@@ -143,8 +147,6 @@ class DocumentSearch:
         self._report_progress("Answering", True)
 
         top_results = scored_results[:top_k]
-
-        from nasi_ayam.database import get_cursor
 
         search_results: list[SearchResult] = []
         for (doc, _), rerank_score in top_results:

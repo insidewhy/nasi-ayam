@@ -278,18 +278,29 @@ def _interactive_loop(agent: RetrievalAgent) -> None:
 
 
 def _create_progress_callback() -> (
-    tuple[dict[str, Spinner | None | bool], ProgressCallback]
+    tuple[dict[str, Spinner | None | bool | str], ProgressCallback]
 ):
     """Create a progress callback that manages a spinner."""
-    state: dict[str, Spinner | None | bool] = {"spinner": None, "first": True}
+    state: dict[str, Spinner | None | bool | str] = {
+        "spinner": None,
+        "first": True,
+        "last_stage": "",
+    }
 
     def callback(stage: str, is_starting: bool) -> None:
         if is_starting:
+            current_spinner = state["spinner"]
+            if isinstance(current_spinner, Spinner):
+                last_stage = state.get("last_stage", "")
+                if isinstance(last_stage, str):
+                    current_spinner.stop(last_stage, newline=False)
+
             is_first = state["first"]
             state["first"] = False
             new_spinner = Spinner(stage, inline=not is_first)
             new_spinner.start()
             state["spinner"] = new_spinner
+            state["last_stage"] = stage
         else:
             current_spinner = state["spinner"]
             if isinstance(current_spinner, Spinner):
